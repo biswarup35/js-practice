@@ -4,5 +4,9 @@
   "main": "index.js",
   "repository": "https://github.com/biswarup35/js-practice.git",
   "author": "Biswarup35 <biswarup35@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^27.0.2",
+    "jest": "^27.3.1"
+  }
 }
