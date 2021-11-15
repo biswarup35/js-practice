@@ -1,30 +1,47 @@
 /**
- * You can use Obejct.create() to create a new object.
+ * The Object.assign() method copies all enumerable
+ *  own properties from one or more source objects
+ * to a target object. It returns the target object.
  *
- * Implement your own `objectCreate()` to do the same.
+ *  It is widely used, object spread operator actually is
+ *  inernally the same as the Obejct.assign()
  *
- * You don't need to support propertiesObject (2nd parameter of Object.create())
- * Throw an error if non-object is passed in.
- * Object.create() and Object.setProtoypeOf() should not be used.
  *
- * @param {object} proto
+ *      let a = {}
+ *      let aClone = {...a}
+ *
+ * @param {object} target
+ * @param {object[]} sources
  * @return {object}
  */
-function objectCreate(proto) {
-  if (proto === null) {
-    throw new Error("proto cannot be null");
+function objectAssign(target, ...sources) {
+  if (arguments[0] === null) {
+    throw new Error("target cannot be null");
+  } else if (arguments[0] === undefined) {
+    throw new Error("target cannot be undefined");
   }
-  if (proto === undefined) {
-    throw new Error("proto cannot be undefined");
+
+  for (const objects of sources) {
+    for (const key in objects) {
+      let symbols = Object.getOwnPropertySymbols(objects);
+      for (const symbol of symbols) {
+        target[symbol] = objects[symbol];
+      }
+
+      if (objects.hasOwnProperty.call(objects, key)) {
+        if (target !== Object(target)) {
+          target = Object(target);
+        }
+        if (Object.getOwnPropertyDescriptor(target, key)) {
+          if (Object.getOwnPropertyDescriptor(target, key).writable === false) {
+            throw new Error("read-only");
+          }
+        }
+        target[key] = objects[key];
+      }
+    }
   }
-  if (proto !== Object(proto)) {
-    throw new Error(
-      `proto expected to be an object but recived ${typeof proto}`
-    );
-  }
-  function Fn() {}
-  Fn.prototype = proto.prototype || proto;
-  return new Fn();
+  return target;
 }
 
-module.exports = objectCreate;
+module.exports = objectAssign;
